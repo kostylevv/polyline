@@ -20,9 +20,9 @@ public class Main {
 
     public static void main(String[] args) {
         String words = "-t set -i 148 -m Here is some text to store on the server";
-        Main mArgs = new Main();
         //String[] argv = { "-log", "2", "-groups", "unit" };
         String[] argc = words.split(" ");
+        Main mArgs = new Main();
         JCommander.newBuilder()
                 .addObject(mArgs)
                 .build()
