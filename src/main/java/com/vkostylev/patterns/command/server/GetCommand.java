@@ -1,6 +1,4 @@
-package com.vkostylev.patterns.command;
-
-import java.io.DataOutputStream;
+package com.vkostylev.patterns.command.server;
 
 public class GetCommand implements Command {
     private Storage storage;

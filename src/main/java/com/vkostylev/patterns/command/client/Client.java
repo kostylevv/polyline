@@ -1,6 +1,8 @@
-package com.vkostylev.patterns.command;
+package com.vkostylev.patterns.command.client;
 
 import com.beust.jcommander.JCommander;
+import com.vkostylev.patterns.command.Param;
+
 import java.io.DataInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -26,7 +28,7 @@ public class Client {
             Thread.sleep(1000);
             System.out.println("Received: " + serverMessage);
         } catch (Exception e) {
-            //System.out.println(e);
+            System.out.println(e);
         }
 
     }

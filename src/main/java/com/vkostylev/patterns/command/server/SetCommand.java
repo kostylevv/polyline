@@ -1,4 +1,4 @@
-package com.vkostylev.patterns.command;
+package com.vkostylev.patterns.command.server;
 
 public class SetCommand implements Command {
         private Storage storage;

@@ -1,4 +1,4 @@
-package com.vkostylev.patterns.command;
+package com.vkostylev.patterns.command.server;
 
 public class DeleteCommand implements Command {
     private Storage storage;

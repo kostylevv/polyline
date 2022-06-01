@@ -1,8 +1,6 @@
-package com.vkostylev.patterns.command;
+package com.vkostylev.patterns.command.server;
 
 public class Controller {
-    //invoker
-
     private Command command;
 
     public void setCommand(Command command) {

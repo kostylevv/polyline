@@ -1,4 +1,6 @@
-package com.vkostylev.patterns.command;
+package com.vkostylev.patterns.command.server;
+
+import com.vkostylev.patterns.command.*;
 
 import java.io.DataOutputStream;
 import java.io.ObjectInputStream;
@@ -7,11 +9,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
+    private static Storage storage = new Storage(10);;
     public static void main(String[] args) {
         String address = "127.0.0.1";
         int port = 23456;
         boolean run = true;
-        Storage storage = new Storage(1000);
         Controller controller = new Controller();
         System.out.println("Server started!");
 
@@ -22,7 +24,6 @@ public class Server {
                 ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
                 Param clientMessage = (Param) input.readObject();
-
                 switch (clientMessage.type) {
                     case "exit":
                         run = false;
@@ -37,6 +38,7 @@ public class Server {
                         Command set = new SetCommand(storage, clientMessage.index, clientMessage.message);
                         controller.setCommand(set);
                         output.writeUTF(controller.executeCommand());
+                        break;
                     case "delete":
                         Command delete = new DeleteCommand(storage, clientMessage.index);
                         controller.setCommand(delete);
@@ -48,7 +50,7 @@ public class Server {
             }
             server.close();
         } catch (Exception e) {
-            System.out.println(e);
+           e.printStackTrace();
         }
     }
 }
