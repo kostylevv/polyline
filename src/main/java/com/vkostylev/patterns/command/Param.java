@@ -14,15 +14,15 @@ public class Param implements Serializable {
     public String type;
 
     @Parameter(names = "-i", description = "Index in storage")
-    public int index = -1;
+    public String index;
 
     @Parameter(names = "-m", description = "Message to store", variableArity = true)
-    public String message;
+    public String value;
 
     public String getSentMessageText() {
         if (type.equalsIgnoreCase("exit")) return "exit";
         if (type.equalsIgnoreCase("set")) {
-            return "set " + index + " " + message;
+            return "set " + index + " " + value;
         }
         return type + " " + index;
     }

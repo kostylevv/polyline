@@ -1,7 +1,11 @@
 package com.vkostylev.patterns.command.server;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.vkostylev.libs.gson.JsonStorage;
 import com.vkostylev.patterns.command.*;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.ObjectInputStream;
 import java.net.InetAddress;
@@ -9,7 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    private static Storage storage = new Storage(10);;
+    private static JsonStorage storage = new JsonStorage();
     public static void main(String[] args) {
         String address = "127.0.0.1";
         int port = 23456;
@@ -21,32 +25,37 @@ public class Server {
             ServerSocket server = new ServerSocket(port, 50, InetAddress.getByName(address));
             while (run) {
                 Socket socket = server.accept();
-                ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+                DataInputStream input = new DataInputStream(socket.getInputStream());
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-                Param clientMessage = (Param) input.readObject();
-                switch (clientMessage.type) {
+
+                String message = input.readUTF();
+                JsonObject clientMessage = new Gson().fromJson(message, JsonObject.class);
+                JsonObject response = new JsonObject();
+
+                switch (clientMessage.get("type").getAsString()) {
                     case "exit":
                         run = false;
-                        output.writeUTF("OK");
+                        response.addProperty("response","OK");
+                        output.writeUTF(response.toString());
                         break;
                     case "get":
-                        Command get = new GetCommand(storage, clientMessage.index);
-                        controller.setCommand(get);
-                        output.writeUTF(controller.executeCommand());
+                         response = storage.get(clientMessage.get("key").getAsString());
+                         output.writeUTF(response.toString());
                         break;
                     case "set":
-                        Command set = new SetCommand(storage, clientMessage.index, clientMessage.message);
-                        controller.setCommand(set);
-                        output.writeUTF(controller.executeCommand());
+                        response = storage.set(clientMessage.get("key").getAsString(), clientMessage.get("value").getAsString());
+                        output.writeUTF(response.toString());
                         break;
                     case "delete":
-                        Command delete = new DeleteCommand(storage, clientMessage.index);
-                        controller.setCommand(delete);
-                        output.writeUTF(controller.executeCommand());
+                        response = storage.delete(clientMessage.get("key").getAsString());
+                        output.writeUTF(response.toString());
                         break;
                     default:
-                        System.out.println("Operation unsupported (recieved: " + clientMessage + ")");
+                        response.addProperty("response","ERROR");
+                        response.addProperty("reason", "Operation unsupported");
+                        output.writeUTF(response.toString());
                 }
+                System.out.println("storage now: " + storage.getStorage());
             }
             server.close();
         } catch (Exception e) {
