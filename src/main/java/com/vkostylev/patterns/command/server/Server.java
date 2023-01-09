@@ -1,5 +1,5 @@
 package com.vkostylev.patterns.command.server;
-
+/*
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.vkostylev.libs.gson.JsonStorage;
@@ -13,7 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    private static JsonStorage storage = new JsonStorage();
+    //private static JsonFileStorage storage;
     public static void main(String[] args) {
         String address = "127.0.0.1";
         int port = 23456;
@@ -22,6 +22,7 @@ public class Server {
         System.out.println("Server started!");
 
         try {
+            storage = new JsonFileStorage();
             ServerSocket server = new ServerSocket(port, 50, InetAddress.getByName(address));
             while (run) {
                 Socket socket = server.accept();
@@ -55,7 +56,7 @@ public class Server {
                         response.addProperty("reason", "Operation unsupported");
                         output.writeUTF(response.toString());
                 }
-                System.out.println("storage now: " + storage.getStorage());
+                //System.out.println("storage now: " + storage.getStorage());
             }
             server.close();
         } catch (Exception e) {
@@ -63,3 +64,5 @@ public class Server {
         }
     }
 }
+
+ */

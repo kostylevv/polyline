@@ -13,11 +13,14 @@ public class Param implements Serializable {
     @Parameter(names = { "-t", "-type" }, description = "Type of command")
     public String type;
 
-    @Parameter(names = "-i", description = "Index in storage")
+    @Parameter(names = "-k", description = "Index in storage")
     public String index;
 
-    @Parameter(names = "-m", description = "Message to store", variableArity = true)
+    @Parameter(names = "-v", description = "Message to store", variableArity = true)
     public String value;
+
+    @Parameter(names = "-in", description = "Read request from file", variableArity = true)
+    public String file;
 
     public String getSentMessageText() {
         if (type.equalsIgnoreCase("exit")) return "exit";
